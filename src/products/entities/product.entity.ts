@@ -1,6 +1,14 @@
 
 // representacion de una tabla
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { 
+    BeforeInsert, 
+    BeforeUpdate, 
+    Column, 
+    Entity, 
+    OneToMany, 
+    PrimaryGeneratedColumn 
+} from 'typeorm';
+import { ProductImage } from './product-image.entity';
 
 @Entity()
 export class Product {
@@ -48,6 +56,15 @@ export class Product {
         default: []
     })
     tags: string[];
+
+    // 1 product can have many images
+    // relation 1:N (one to many)
+    @OneToMany(
+        () => ProductImage,
+        (productImage) => productImage.product,
+        { cascade: true }
+    )
+    images?: ProductImage;
 
     // images
 

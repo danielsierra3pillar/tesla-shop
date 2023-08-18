@@ -8,11 +8,8 @@ export class ProductImage {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({
-        type: 'text',
-    })
+    @Column('text')
     url: string;
-
     
     @ManyToOne(
         () => Product,

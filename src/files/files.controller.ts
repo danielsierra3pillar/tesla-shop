@@ -2,13 +2,22 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInt
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileFilter } from './helpers/fileFilter.helper';
+import { diskStorage } from 'multer';
+import { fileNamer } from './helpers/fileNamer.helper';
 
 @Controller('files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('product')
-  @UseInterceptors( FileInterceptor('file', { fileFilter: fileFilter }))
+  @UseInterceptors( FileInterceptor('file', 
+  { 
+    fileFilter: fileFilter,
+    storage: diskStorage({
+      destination: './static/products',
+      filename: fileNamer,
+    })
+  }))
   uploadFile(
     @UploadedFile() 
     file: Express.Multer.File 
@@ -21,9 +30,10 @@ export class FilesController {
 
       }
 
+      const secureUrl = `${ file.filename }`
 
     return {
-      fileName: file.originalname
+      secureUrl
     }
   }
 

@@ -9,6 +9,14 @@ import { fileNamer } from './helpers/fileNamer.helper';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
+  @Get('product/:imageName')
+  findProductByImage(
+    @Param('imageName') imageName: string
+  ) {
+    const path = this.filesService.getStaticProductImage(imageName)
+    return path
+  }
+
   @Post('product')
   @UseInterceptors( FileInterceptor('file', 
   { 
